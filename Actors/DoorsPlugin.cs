@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Turbo.Plugins.Default;
-
-namespace Turbo.Plugins.Jack.Actors
+﻿namespace Turbo.Plugins.Jack.Actors
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Turbo.Plugins.Default;
+
     public class DoorsPlugin : BasePlugin, IInGameWorldPainter
     {
         public WorldDecoratorCollection DoorsDecorators { get; set; }
@@ -15,15 +14,18 @@ namespace Turbo.Plugins.Jack.Actors
         public bool GroundLabelsOnScreen { get; set; }
 
         private readonly HashSet<uint> bridgesIds = new HashSet<uint> { 309432, 54850, 404043, 198125 };
-        private readonly HashSet<uint> breakableDoorsIds = new HashSet<uint> { 55325, 427495, 5792, 95481, 379048, 95481, 230324, };// 258064 };
+        private readonly HashSet<uint> breakableDoorsIds = new HashSet<uint> { 55325, 427495, 5792, 95481, 379048, 95481, 230324, }; // 258064 };
+
         private readonly HashSet<uint> doorsIdsBlackList = new HashSet<uint>() {
             197939, 169502, 214333, 181195, 190236, // A2 to belial
             167185, // A2 Alcarnus
             200371, 5503, // A2 City
             198977, 52685, // A3 rakkis crossing
             112316, // A3 stonefort
-            356879,
+            210433, // A3 battlefields
+            356879, 182636, 165415,
         };
+
         //170245
         private readonly HashSet<uint> doorsDebugWhiteList = new HashSet<uint>() {
             309222, 308241, 454, // ??
@@ -75,12 +77,10 @@ namespace Turbo.Plugins.Jack.Actors
                     else if (door.GizmoType == GizmoType.Door && door.DisplayOnOverlay && !doorsIdsBlackList.Contains(door.SnoActor.Sno))
                     {
                         PaintActor(layer, door, bridgesIds.Contains(door.SnoActor.Sno) ? BridgesDecorators : DoorsDecorators);
-                        //if (!doorsDebugWhiteList.Contains(door.SnoActor.Sno))
-                            //Simon.Says.Debug(string.Format("DOOR?? {0} {1} {2} {3} {4} {5} {6}", door.SnoActor.Sno, door.SnoActor.NameLocalized, door.IsOperated, door.IsClickable, door.IsDisabled, door.SnoActor.Kind, door.SnoActor.Code));/**/
+                        //if (!doorsDebugWhiteList.Contains(door.SnoActor.Sno)) Says.Debug(string.Format("DOOR?? {0} {1} {2} {3} {4} {5} {6}", door.SnoActor.Sno, door.SnoActor.NameLocalized, door.IsOperated, door.IsClickable, door.IsDisabled, door.SnoActor.Kind, door.SnoActor.Code));/**/
                     }
 
-                    //if (!doorsDebugWhiteList.Contains(door.SnoActor.Sno))
-                        //Simon.Says.Debug(string.Format("DOOR?? {0} {1} {2} {3} {4} {5} {6}", door.SnoActor.Sno, door.SnoActor.NameLocalized, door.IsOperated, door.IsClickable, door.IsDisabled, door.SnoActor.Kind, door.SnoActor.Code));/**/
+                    //if (!doorsDebugWhiteList.Contains(door.SnoActor.Sno)) Says.Debug(string.Format("DOOR?? {0} {1} {2} {3} {4} {5} {6}", door.SnoActor.Sno, door.SnoActor.NameLocalized, door.IsOperated, door.IsClickable, door.IsDisabled, door.SnoActor.Kind, door.SnoActor.Code));/**/
                 });
         }
 
@@ -90,8 +90,6 @@ namespace Turbo.Plugins.Jack.Actors
                 new GroundLabelDecorator(Hud)
                 {
                     TextFont = Hud.Render.CreateFont("tahoma", 18, 200, r, g, b, false, false, true),
-                    //BackgroundBrush = Hud.Render.CreateBrush(142, 0, 0, 0, 0),
-                    //BorderBrush = Hud.Render.CreateBrush(178, r, g, b, 1),
                 },
                 new MapShapeDecorator(Hud)
                 {
@@ -107,7 +105,6 @@ namespace Turbo.Plugins.Jack.Actors
             if (GroundLabelsOnScreen)
                 decorator.ToggleDecorators<GroundLabelDecorator>(!actor.IsOnScreen);
 
-            //decorator.Paint(layer, actor, actor.FloorCoordinate, actor.SnoActor.NameEnglish);// "\uD83D\uDEAA");
             decorator.Paint(layer, actor, actor.FloorCoordinate, "\uD83D\uDEAA"); //🚪
         }
     }

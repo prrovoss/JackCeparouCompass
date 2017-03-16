@@ -1,10 +1,9 @@
-﻿using Turbo.Plugins.Jack.Extensions;
-
-namespace Turbo.Plugins.Jack.Alerts
+﻿namespace Turbo.Plugins.Jack.Alerts
 {
     using System.Collections.Generic;
     using System.Linq;
     using Turbo.Plugins.Default;
+    using Turbo.Plugins.Jack.Extensions;
     using Turbo.Plugins.Jack.Models;
 
     public class PlayerTopAlertListPlugin : BasePlugin, IInGameTopPainter, IInGameWorldPainter
@@ -25,6 +24,9 @@ namespace Turbo.Plugins.Jack.Alerts
                 TextAlign = HorizontalAlign.Center,
             };
 
+            var powers = Hud.Sno.SnoPowers;
+            var warningMessageFormat = "\u26A0 {0} \u26A0"; //⚠
+
             // ===
             // ALL
             // ===
@@ -32,7 +34,7 @@ namespace Turbo.Plugins.Jack.Alerts
             var moltenIds = new HashSet<uint>() { 4803, 4804, 224225, 247987 };
             AlertList.Alerts.Add(new Alert(Hud)
             {
-                MessageFormat = "\uD83D\uDCA3 \uD83D\uDCA5 \uD83D\uDCA3",//💣 💥 💣
+                MessageFormat = "\uD83D\uDCA3 \uD83D\uDCA5 \uD83D\uDCA3", //💣 💥 💣
                 Rule =
                 {
                     ActorSnoIds = moltenIds,
@@ -54,11 +56,11 @@ namespace Turbo.Plugins.Jack.Alerts
             };
             AlertList.Alerts.Add(new Alert(Hud)
             {
-                MessageFormat = "\uD83D\uDCA5 {0} \uD83D\uDCA5",//💥
+                MessageFormat = "\uD83D\uDCA5 {0} \uD83D\uDCA5", //💥
                 AlertTextFunc = (id) =>
                 {
                     var sno = Hud.Game.Monsters.FirstOrDefault(m => explosiveMonsterIds.Contains(m.SnoActor.Sno));
-                    return sno != null && sno.SnoActor != null ? sno.SnoActor.NameLocalized : "\uD83D\uDCA3";//💣
+                    return sno != null && sno.SnoActor != null ? sno.SnoActor.NameLocalized : "\uD83D\uDCA3"; //💣
                 },
                 Rule =
                 {
@@ -78,10 +80,10 @@ namespace Turbo.Plugins.Jack.Alerts
             {
                 //AlertTextFunc = (id) => "Oculus",
                 TextSnoId = 3563390301,
-                MessageFormat = "\u2694 {0} \u2694",//⚔
+                MessageFormat = "\u2694 {0} \u2694", //⚔
                 Rule =
                 {
-                    ActiveBuffs = new [] { new SnoPowerId(402461, 2) },
+                    ActiveBuffs = new[] { new SnoPowerId(402461, 2) },
                 },
                 Label =
                 {
@@ -95,45 +97,45 @@ namespace Turbo.Plugins.Jack.Alerts
             // War Cry
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.Barbarian)
             {
-                TextSnoId = 375483,
-                MessageFormat = "\u26A0 {0} \u26A0",//⚠
+                TextSnoId = powers.Barbarian_WarCry.Sno,
+                MessageFormat = warningMessageFormat,
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(375483) },
-                    InactiveBuffs = new [] { new SnoPowerId(375483) }
+                    EquippedSkills = new[] { powers.Barbarian_WarCry.CreateSnoPowerId() },
+                    InactiveBuffs = new[] { powers.Barbarian_WarCry.CreateSnoPowerId() }
                 },
             });
             // Battle Rage
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.Barbarian)
             {
-                TextSnoId = 79076,
-                MessageFormat = "\u26A0 {0} \u26A0",//⚠
+                TextSnoId = powers.Barbarian_BattleRage.Sno,
+                MessageFormat = warningMessageFormat,
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(79076) },
-                    InactiveBuffs = new [] { new SnoPowerId(79076) }
+                    EquippedSkills = new[] { new SnoPowerId(powers.Barbarian_BattleRage.Sno) },
+                    InactiveBuffs = new[] { new SnoPowerId(powers.Barbarian_BattleRage.Sno) }
                 },
             });
             // Ignore Pain
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.Barbarian)
             {
-                TextSnoId = 79528,
-                MessageFormat = "\u26A0 {0} \u26A0",//⚠
+                TextSnoId = powers.Barbarian_IgnorePain.Sno,
+                MessageFormat = warningMessageFormat,
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(79528) },
-                    InactiveBuffs = new [] { new SnoPowerId(79528) }
+                    EquippedSkills = new[] { new SnoPowerId(powers.Barbarian_IgnorePain.Sno) },
+                    InactiveBuffs = new[] { new SnoPowerId(powers.Barbarian_IgnorePain.Sno) }
                 },
             });
             // Call of Ancients
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.Barbarian)
             {
-                TextSnoId = 80049,
-                MessageFormat = "\u26A0 {0} \u26A0",//⚠
+                TextSnoId = powers.Barbarian_CallOfTheAncients.Sno,
+                MessageFormat = warningMessageFormat,
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(80049) },
-                    ActiveBuffs = new [] { new SnoPowerId(318760) }, // only when wearing IK 4pc
+                    EquippedSkills = new[] { new SnoPowerId(powers.Barbarian_CallOfTheAncients.Sno) },
+                    ActiveBuffs = new[] { new SnoPowerId(318760) }, // only when wearing IK 4pc
                     InvocationActorSnoIds = new HashSet<uint>() { 90443, 90535, 90536 }
                 },
             });
@@ -144,18 +146,44 @@ namespace Turbo.Plugins.Jack.Alerts
             // Akarat's Champion
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.Crusader)
             {
-                TextSnoId = 269032,
-                MessageFormat = "\uD83D\uDCAA {0} \uD83D\uDCAA",//💪
+                TextSnoId = powers.Crusader_AkaratsChampion.Sno,
+                MessageFormat = "\uD83D\uDCAA {0} \uD83D\uDCAA", //💪
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(269032) },
-                    ActiveBuffs = new [] { new SnoPowerId(359585) }, // Only when wearing akkhan 6pc
+                    EquippedSkills = new[] { new SnoPowerId(powers.Crusader_AkaratsChampion.Sno) },
+                    ActiveBuffs = new[] { new SnoPowerId(359585) }, // Only when wearing akkhan 6pc
+                },
+            });
+            // Only when wearing seeker of the light 4pc
+            AlertList.Alerts.Add(new Alert(Hud, HeroClass.Crusader)
+            {
+                TextSnoId = powers.Crusader_FallingSword.Sno, // Falling Sword
+                MessageFormat = warningMessageFormat,
+                Rule =
+                {
+                    ShowOutOfCombat = false,
+                    CheckSkillCooldowns = false,
+                    EquippedSkills = new[] { new SnoPowerId(powers.Crusader_FallingSword.Sno) },
+                    ActiveBuffs = new[] { new SnoPowerId(436426) }, // Only when wearing seeker of the light 4pc
+                    InactiveBuffs = new[] { new SnoPowerId(powers.Crusader_FallingSword.Sno) },
                 },
             });
 
             // ===========
             // DemonHunter
             // ===========
+            // Vengeance
+            AlertList.Alerts.Add(new Alert(Hud, HeroClass.DemonHunter)
+            {
+                TextSnoId = powers.DemonHunter_Vengeance.Sno,
+                MessageFormat = "\u26A0 {0} \u26A0", //⚠
+                Rule =
+                {
+                    CheckSkillCooldowns = true,
+                    EquippedSkills = new[] { new SnoPowerId(powers.DemonHunter_Vengeance.Sno) },
+                    InactiveBuffs = new[] { new SnoPowerId(powers.DemonHunter_Vengeance.Sno) },
+                },
+            });
 
             // ====
             // Monk
@@ -164,10 +192,10 @@ namespace Turbo.Plugins.Jack.Alerts
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.Monk)
             {
                 TextSnoId = 3968109489,
-                MessageFormat = "\u2694 {0} \u2694",//⚔
+                MessageFormat = "\u2694 {0} \u2694", //⚔
                 Rule =
                 {
-                    ActiveBuffs = new [] { new SnoPowerId(246562, 1)},
+                    ActiveBuffs = new[] { new SnoPowerId(246562, 1) },
                 },
                 Label =
                 {
@@ -182,8 +210,8 @@ namespace Turbo.Plugins.Jack.Alerts
                 MessageFormat = "!! {0} !!",
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(96090) },
-                    InactiveBuffs = new [] { new SnoPowerId(96090), new SnoPowerId(446562) },
+                    EquippedSkills = new[] { new SnoPowerId(96090) },
+                    InactiveBuffs = new[] { new SnoPowerId(96090), new SnoPowerId(446562) },
                 },
                 PlayerDecorators = new WorldDecoratorCollection(
                     new GroundCircleDecorator(Hud)
@@ -202,12 +230,12 @@ namespace Turbo.Plugins.Jack.Alerts
                 MessageFormat = "!! {0} !!",
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(96090) },
-                    ActiveBuffs = new [] { new SnoPowerId(446562)},
-                    CustomCondition = (controller) =>
+                    EquippedSkills = new[] { new SnoPowerId(96090) },
+                    ActiveBuffs = new[] { new SnoPowerId(446562) },
+                    CustomCondition = (player) =>
                     {
-                        var sweepingWind = controller.Game.Me.Powers.GetBuff(96090);
-                        return (sweepingWind != null && sweepingWind.IconCounts[0] < 2);
+                        var sweepingWind = Hud.Game.Me.Powers.GetBuff(96090);
+                        return sweepingWind != null && sweepingWind.IconCounts[0] < 2;
                     },
                 },
                 PlayerDecorators = new WorldDecoratorCollection(
@@ -225,73 +253,103 @@ namespace Turbo.Plugins.Jack.Alerts
             // gargantuans
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.WitchDoctor)
             {
-                TextSnoId = 30624,
+                TextSnoId = powers.WitchDoctor_Gargantuan.Sno,
                 MessageFormat = "\uD83D\uDEB6 {0} \uD83D\uDEB6", //🚶
                 Rule =
                 {
                     ShowInTown = true,
-                    EquippedSkills = new [] { new SnoPowerId(30624) },
+                    EquippedSkills = new[] { new SnoPowerId(powers.WitchDoctor_Gargantuan.Sno) },
                     InvocationActorSnoIds = new HashSet<uint>() { 432690, 432691, 432692, 432693, 432694, 122305, 179776, 171491, 179778, 171501, 171502, 179780, 179779, 179772 }
                 },
             });
             // zombie dogs
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.WitchDoctor)
             {
-                TextSnoId = 102573,
-                MessageFormat = "\uD83D\uDC15 {0} \uD83D\uDC15",//🐕
+                TextSnoId = powers.WitchDoctor_SummonZombieDog.Sno,
+                MessageFormat = "\uD83D\uDC15 {0} \uD83D\uDC15", //🐕
                 Rule =
                 {
                     ShowInTown = true,
-                    EquippedSkills = new [] { new SnoPowerId(102573) },
+                    EquippedSkills = new[] { new SnoPowerId(powers.WitchDoctor_SummonZombieDog.Sno) },
                     InvocationActorSnoIds = new HashSet<uint>() { 51353, 108536, 103215, 108543, 104079, 105763, 108560, 110959, 105772, 103235, 108550, 103217, 108556, 105606 }
+                },
+            });
+            // Hex
+            AlertList.Alerts.Add(new Alert(Hud, HeroClass.WitchDoctor)
+            {
+                TextSnoId = powers.WitchDoctor_Hex.Sno,
+                MessageFormat = "\u26A0 {0} \u26A0", //⚠
+                Rule =
+                {
+                    EquippedSkills = new[] { new SnoPowerId(powers.WitchDoctor_Hex.Sno) },
+                    ActiveBuffs = new[] { new SnoPowerId(439308) }, // arachyr set 4 piece
+                    InactiveBuffs = new[] { new SnoPowerId(powers.WitchDoctor_Hex.Sno) },
+                }
+            });
+            // SoulHarvest
+            AlertList.Alerts.Add(new Alert(Hud, HeroClass.WitchDoctor)
+            {
+                TextSnoId = powers.WitchDoctor_SoulHarvest.Sno,
+                MessageFormat = "\u2668 {0} \u2668", //⚠
+                Rule =
+                {
+                    ShowOutOfCombat = false,
+                    EquippedSkills = new[] { new SnoPowerId(powers.WitchDoctor_SoulHarvest.Sno) },
+                    InactiveBuffs = new[] { new SnoPowerId(powers.WitchDoctor_SoulHarvest.Sno) },
                 },
             });
 
             // ======
             // Wizard
             // ======
+            var allWizardArmors = new[]
+            {
+                new SnoPowerId(74499),
+                new SnoPowerId(86991),
+                new SnoPowerId(73223)
+            };
             // Energy Armor
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.Wizard)
             {
                 TextSnoId = 86991,
-                MessageFormat = "\u269B {0} \u269B",//⚛
+                MessageFormat = "\u269B {0} \u269B", //⚛
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(86991) },
-                    InactiveBuffs = new [] { new SnoPowerId(74499), new SnoPowerId(86991), new SnoPowerId(73223) },
+                    EquippedSkills = new[] { new SnoPowerId(86991) },
+                    InactiveBuffs = allWizardArmors,
                 },
             });
             // Storm Armor
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.Wizard)
             {
                 TextSnoId = 74499,
-                MessageFormat = "\u269B {0} \u269B",//⚛
+                MessageFormat = "\u269B {0} \u269B", //⚛
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(74499) },
-                    InactiveBuffs = new [] { new SnoPowerId(74499), new SnoPowerId(86991), new SnoPowerId(73223) },
+                    EquippedSkills = new[] { new SnoPowerId(74499) },
+                    InactiveBuffs = allWizardArmors,
                 },
             });
             // Ice Armor
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.Wizard)
             {
                 TextSnoId = 73223,
-                MessageFormat = "\u269B {0} \u269B",//⚛
+                MessageFormat = "\u269B {0} \u269B", //⚛
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(73223) },
-                    InactiveBuffs = new [] { new SnoPowerId(74499), new SnoPowerId(86991), new SnoPowerId(73223) },
+                    EquippedSkills = new[] { new SnoPowerId(73223) },
+                    InactiveBuffs = allWizardArmors,
                 },
             });
             // Magic Weapon
             AlertList.Alerts.Add(new Alert(Hud, HeroClass.Wizard)
             {
                 TextSnoId = 76108,
-                MessageFormat = "\uD83D\uDDE1 {0} \uD83D\uDDE1",//🗡
+                MessageFormat = "\uD83D\uDDE1 {0} \uD83D\uDDE1", //🗡
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(76108) },
-                    InactiveBuffs = new [] { new SnoPowerId(76108), }
+                    EquippedSkills = new[] { new SnoPowerId(76108) },
+                    InactiveBuffs = new[] { new SnoPowerId(76108), }
                 },
             });
             // Familiar
@@ -301,8 +359,21 @@ namespace Turbo.Plugins.Jack.Alerts
                 MessageFormat = "!! {0} !!",
                 Rule =
                 {
-                    EquippedSkills = new [] { new SnoPowerId(99120) },
-                    InactiveBuffs = new [] { new SnoPowerId(99120), }
+                    EquippedSkills = new[] { new SnoPowerId(99120) },
+                    InactiveBuffs = new[] { new SnoPowerId(99120), }
+                },
+            });
+            // Archon & no bubble
+            AlertList.Alerts.Add(new Alert(Hud, HeroClass.Wizard)
+            {
+                TextSnoId = 135663,
+                MessageFormat = "\u2668 {0} \u2668", //⚠
+                Rule =
+                {
+                    //CheckSkillCooldowns = false,
+                    //EquippedSkills = new[] { new SnoPowerId(134872), },
+                    ActiveBuffs = new[] { new SnoPowerId(134872, 2), },
+                    InactiveBuffs = new[] { new SnoPowerId(135663), }
                 },
             });
         }

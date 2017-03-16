@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using Turbo.Plugins.Default;
+    using Turbo.Plugins.Jack.Models;
     using Turbo.Plugins.Jack.Extensions;
 
     /// <summary>
@@ -12,13 +13,20 @@
     public class Alert
     {
         public IController Hud { get; private set; }
+        public IPlayer Player { get { return Hud.Game.Me; } }
 
         // state
         public bool Enabled { get; set; }
 
         public bool MultiLine { get; set; }
 
-        public bool Visible { get { return Rule != null && Rule.VisibleCondition != null && Rule.VisibleCondition.Invoke(Hud); } }
+        public bool Visible
+        {
+            get
+            {
+                return Rule != null && Rule.VisibleCondition != null && Rule.VisibleCondition.Invoke(Player);
+            }
+        }
 
         // conditions
         public AlertRule Rule { get; set; }

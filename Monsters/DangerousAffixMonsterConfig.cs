@@ -68,8 +68,15 @@
                 plugin.DefineDangerousAffix(MonsterAffix.Wormhole, (a) => a.NameLocalized.Substring(0, 4));
 
                 plugin.DefineDangerousAffix(MonsterAffix.Waller, string.Empty);
-                /**/
+
+                // disable all MapShapeDecorators
+                //foreach (MonsterAffix affix in Enum.GetValues(typeof(MonsterAffix)))
+                //{
+                //    if (plugin.Affixes.ContainsKey(affix))
+                //        plugin.Affixes[affix].EliteDecorators.ToggleDecorators<MapShapeDecorator>(false);
+                //}
             });
+
             // the config is done, disable this plugin
             Enabled = false;
         }
@@ -79,7 +86,7 @@
             Hud.RunOnPlugin<DangerousAffixMonsterPlugin>(plugin =>
             {
                 var p = 420;
-                foreach (MonsterAffix affix in Enum.GetValues(typeof (MonsterAffix)))
+                foreach (MonsterAffix affix in Enum.GetValues(typeof(MonsterAffix)))
                 {
                     plugin.DefineDangerousAffix(affix,
                         (a) => a.NameLocalized.Substring(0, 3), // or a string like "Jug"
